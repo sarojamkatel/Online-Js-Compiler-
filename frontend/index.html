@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- google font  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="public/images/logo.png" />
+    <link rel="stylesheet" href="/src/normalize.css">
+    <title>Online Js Compiler </title>
+    <!-- for icons  -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  </head>
+
+  <body class="py-5 pb-52 ">
+
+    <!-- header  -->
+    <header
+      class="flex justify-center sm:justify-between flex-wrap gap-3  items-center px-10 "
+    >
+    <!-- left header  -->
+      <div class="left flex items-center gap-2 cursor-pointer">
+        <img src="/images/logo2.png" alt="logo" class="w-10  rounded-md" />
+        <h2 class="text-4xl">Online Js Compiler </h2>
+      </div>
+
+<!-- right header  -->
+      <div class="right flex items-center gap-10 text-end">
+        <div class="icons text-5xl cursor-pointer">
+          <button id="light" class="hidden">
+            <iconify-icon
+              icon="line-md:sunny-outline-to-moon-alt-loop-transition"
+            ></iconify-icon>
+          </button>
+          <button id="dark">
+            <iconify-icon
+              icon="line-md:moon-alt-to-sunny-outline-loop-transition"
+            ></iconify-icon>
+          </button>
+        </div>
+        <div class="login text-2xl bg-blue-400 hover:bg-blue-500 transition-all px-2 py-1   rounded-md mb-2 ">
+          <button id="loginBtn">Login</button>
+
+          <image src="/images/account.png" id="accountImage" class="w-7  cursor-pointer  rounded-full hidden"></image>
+          <button id="afterLogin" class="hidden ">
+          </button>
+        </div>
+      </div>
+
+      <!-- after login ui -->
+      <div
+        id="afterLoginUI"
+        class="afterLoginUI hidden
+         bg-white text-center z-20 text-black absolute right-20 w-60 rounded-md h-rull py-5 top-20"
+      >
+        <button
+          id="logOut"
+          class="text-center px-2 mb-5 py-1 rounded-md text-xl bg-red-500 cursor-pointer"
+        >
+          Log Out
+        </button>
+        <br />
+        <button
+          id="updatePasswordBtn"
+          class="blue--btn"
+        >
+          updatePassword
+        </button>
+      </div>
+
+      <!-- update password  -->
+      <form
+        id="updatePasswordForm"
+        class="modal--design flex-col gap-10"
+      >
+        <input
+          type="text"
+          id="oldPassword"
+          placeholder="Old Password"
+          required
+          class="input--field"
+        />
+        <input
+          type="text"
+          id="newPassword"
+          placeholder="New Password"
+          required
+          class="input--field"
+        />
+        <button type="button" id="updatePassword"
+        class="blue--btn"
+         >Update Password</button>
+         <p id="passwordUpdateError" class="text-red-500"></p>
+      </form>
+      
+
+      <!-- show all users  -->
+      <div
+      id="showUsersUI"
+      class="loginUi hidden z-40 absolute top-32 left-5 
+      right-5 md:right-[10%] md:left-[10%]   bg-editor px-5 py-10 border border-white"
+    >
+    </div>
+
+      <!-- login ui  -->
+      <div
+        id="loginUi"
+        class="modal--design"
+      >
+        <p class="pb-5" id="authInfo">Login with email or password</p>
+        <p class="pb-5 hidden w-80" id="forgotInfo">
+          Please enter your email, we will send you reset instructions
+        </p>
+
+        <form class="flex  flex-col gap-10" id="form">
+          <input
+            type="text"
+            id="name"
+            placeholder="name"
+            class="input--field"
+          />
+
+          <input
+          required
+            type="email"
+            id="email"
+            placeholder="email"
+            class="input--field"
+          />
+
+          <input
+          required
+            type="text"
+            id="password"
+            placeholder="password"
+            class="input--field"
+          />
+
+          <button type="submit"
+          class="blue--btn"
+            id="login"
+          >
+            login
+          </button>
+          <button type="submit"
+          class="blue--btn"
+            id="signup"
+          >
+            signup
+          </button>
+          <button
+          class="blue--btn"
+            id="continueBtn"
+          >
+            continue
+          </button>
+          <!-- login error element  -->
+           <p id="loginError" class="text-red-500 "></p>
+
+          <div class="signup flex gap-2" id="signupWrapper">
+            <p>New to Website</p>
+            <input
+              type="button"
+              class="underline cursor-pointer"
+              value="signup"
+              id="signupBtn"
+            />
+          </div>
+          <div class="signup gap-2 hidden" id="already-login">
+            <p>Already signup</p>
+            <input
+              type="button"
+              class="underline cursor-pointer"
+              value="login"
+              id="loginback"
+            />
+          </div>
+        </form>
+      </div>
+    </header>
+
+    <!-- nav -->
+    <nav class="flex justify-between px-10  mt-2 relative ">
+      <div class=" files left flex items-center gap-14 flex-wrap relative" id="files">
+       <!-- white line  -->
+          <p id="whiteLine" class="bg-white h-[2px] absolute w-[137px]   top-10"></p>       
+          <button
+          class="addFile text-3xl hover:bg-black p-1 rounded-full  "
+          id="add-file"
+          >
+          +
+        </button>
+        </div>
+
+       <div class="right flex gap-10 items-center  ">
+ 
+        <button
+          id="run"
+          class="flex items-center gap-1 bg-buttonRed px-2 py-2 rounded-lg text-xl hover:opacity-90"
+        >
+          <p>Run</p>
+          <iconify-icon icon="ph:play-fill"></iconify-icon>
+        </button>
+      </div>
+    </nav>
+
+    <!-- main  -->
+    <main class="mt-8 flex flex-col-reverse gap-1 px-2 md:px-0 md:gap-0 md:flex-row  flex-grow   ">
+      <!-- section input area  -->
+      <section class=" md:w-3/5 flex  relative">
+        <div class="lineNumber  w-5 text-md  px-5 text-center bg-suggestion_hover " id="line-numbers"></div>
+        <div class="relative w-full h-full">
+          <div id="highlight" class="highlight"></div>
+                <textarea
+            id="textarea"
+            class="w-full bg-transparent text-transparent caret-white
+             overflow-auto whitespace-pre border border-gray-400 rounded-md h-full  min-h-[680px]  resize-none outline-none"
+
+            placeholder="Write your JS code here & ctrl+s to save file"
+          ></textarea>
+
+          <pre
+            id="highlighted-code"
+            class="absolute top-0 left-0
+              bg-transparent overflow-auto whitespace-pre   w-full  h-full  rounded-md border
+               border-gray-400   pointer-events-none z-10"
+          >
+        </pre>
+      </div>
+
+    </div>
+      <div
+      id="suggestions"
+      class="suggestion fixed hidden bg-editor text-white border
+       border-white max-h-[200px] overflow-y-auto shadow-sm z-[1000]"
+      ></div>
+      
+    </section>
+    
+    <!-- aside output area -->
+    <aside class="md:w-2/5 w-full  md:relative">
+      <div
+      class="output-area rounded-md border border-gray-400 w-full h-full outline-none p-5 bg-editor"
+      >
+      <p class="pb-2">Ctrl+s to save file (after Login). </p>
+      <p>Output</p>
+      
+
+      <p id="output" class="output-show bg-output mt-2 p-2">
+        Click on RUN button to see the output
+      </p>
+    
+
+    </div>
+    <!-- error show  -->
+    <div id="errors" class=" fixed w-full md:w-[600px] top-64 sm:top-40 right-0 min-h-24   py-2
+      hidden text-red-600  bg-editor border border-white px-5 pr-10  z-30">
+     </div>
+  </aside>
+
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/lsp/index.ts"></script>
+    <script type="module" src="/src/auth/interceptor.ts"></script>
+  </body>
+</html>

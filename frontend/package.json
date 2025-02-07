@@ -1,0 +1,28 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@iconify/tailwind": "^1.1.1",
+    "@types/node": "^22.0.0",
+    "@types/prismjs": "^1.26.4",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.6",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.4",
+    "vite-plugin-eslint": "^1.8.1"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "normalize.css": "^8.0.1",
+    "prismjs": "^1.29.0",
+    "socket.io-client": "^4.7.5"
+  }
+}
