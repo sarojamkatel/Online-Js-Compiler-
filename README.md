@@ -46,7 +46,9 @@ Quick Start
 1. With Git Clone
 
    - Clone the project:\
-     `git clone git@github.com`
+     `https://github.com/sarojamkatel/Online-Js-Compiler-.git`
+
+   - Seutup the env
 
 2. Use docker compose up
 

@@ -14,7 +14,7 @@ function buildHuffmanTree(data: string): HuffmanTree {
     frequencyMap.set(char, (frequencyMap.get(char) || 0) + 1)
   }
 
-  // Create a priority queue (min-heap) based on frequencies
+  // Frequency map array [A-5]
   const nodes: HuffmanNode[] = Array.from(frequencyMap.entries()).map(([char, freq]) => ({ char, freq }))
 
 

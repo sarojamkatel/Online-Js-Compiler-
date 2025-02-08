@@ -10,10 +10,6 @@ const app = express();
 
 // Security and CORS configurations
 app.use(helmet());
-// app.use(cors());
-// app.use(cors({
-//   origin: "http://localhost:5173", // Allow requests from your frontend
-// }));
 app.use(cors({
   origin: "http://localhost:5173", // Allow frontend
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Specify allowed methods
