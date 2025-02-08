@@ -1,0 +1,52 @@
+services:
+  backend:
+    container_name: backend_jsEditor
+    env_file:
+      - ./backend/.env
+    build:
+      context: ./backend
+    ports:
+      - "3000:3000"
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - postgres
+    volumes:
+      - backend_data:/app/src/code
+    networks:
+      - app-network
+
+  frontend:
+    container_name: frontend_jsEdior
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BASE_URL=http://localhost:3000
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  postgres:
+    container_name: editor_postgres
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - app-network
+
+volumes:
+  backend_data:
+
+networks:
+  app-network:
+    driver: bridge
