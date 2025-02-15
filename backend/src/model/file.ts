@@ -1,7 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
 import { IFile } from "../interfaces/file";
-import { huffmanDecode, huffmanEncode } from "./huffmanCode";
 
 /**
  * Class to handle file operations for user-specific directories.
@@ -36,22 +35,14 @@ export class FileModal {
 
     const filePath = path.join(FILES_DIR, fileName);
 
-    //compress the file data
-    const { encodeData, tree } = huffmanEncode(fileData);
-
-    // Save both the compressed data and the tree (for decompression)
-    const fileContent = JSON.stringify({ encodeData, tree });
-
     // Write the file content
     try {
-      await fs.writeFile(filePath, fileContent, "utf8");
+      await fs.writeFile(filePath, fileData, "utf8");
       console.log(`File created successfully at ${filePath}`);
     } catch (error) {
       console.error(`Error writing file ${filePath}:`, error);
       throw new Error(`Could not create file: ${error.message}`);
     }
-    // await fs.writeFile(filePath, fileData);
-    // await fs.writeFile(filePath, fileContent, 'utf8');
   }
 
   /**
@@ -76,13 +67,7 @@ export class FileModal {
 
     for (const fileName of fileNames) {
       const filePath = path.join(FILES_DIR, fileName);
-      const fileContent = await fs.readFile(filePath, "utf-8");
-
-      const { encodeData, tree } = JSON.parse(fileContent);
-
-      //Decompress the data
-      const fileData = huffmanDecode(encodeData, tree);
-
+      const fileData = await fs.readFile(filePath, "utf-8");
       files.push({ fileName, fileData });
     }
 

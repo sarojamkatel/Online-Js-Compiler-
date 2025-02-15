@@ -1,5 +1,5 @@
 import NotFoundError from "../error/NotFoundError";
-import * as FileModal from "../model/file";
+import * as FileModal from "../model/fileHuffman";
 
 /**
  * Retrieves a list of files for a specific user.
