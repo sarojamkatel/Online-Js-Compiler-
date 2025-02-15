@@ -3,43 +3,52 @@ export type HuffmanTree = HuffmanNode | null;
 
 /**
  * Convert a binary string to Uint8Array with efficient bit packing
+ * Uint8Array -- Each elements have 1 byte
+ * Stores 8x more compactly than raw binary strings
+ * Original: "01011001" (8 characters = 64 bits JS string)
+ * Packed:   0x59        (1 byte = 8 bits Uint8Array)
  */
 function binaryStringToUint8Array(binString: string): { data: Uint8Array, paddingBits: number } {
-  const padding = 8 - (binString.length % 8);
-  const paddedLength = binString.length + (padding === 8 ? 0 : padding);
-  const bytes = new Uint8Array(paddedLength / 8);
+  const padding = 8 - (binString.length % 8); // 8-(9/8) = 7
+  const paddedLength = binString.length + (padding === 8 ? 0 : padding); // 9+7 = 16 (2 byte)
+  const bytes = new Uint8Array(paddedLength / 8);// 2 elements [0,0]
 
   for (let i = 0; i < paddedLength; i += 8) {
     let byte = 0;
     for (let j = 0; j < 8; j++) {
       const bitIndex = i + j;
+      // 1- add 0 - not add
       if (bitIndex < binString.length && binString[bitIndex] === '1') {
-        byte |= 1 << (7 - j);
+        //  x<<value  x = x * 2^value 2^7 = 128, 2^6 = 64 
+        byte |= 1 << (7 - j); // convert binary to decimal
       }
     }
-    bytes[i / 8] = byte;
+    bytes[i / 8] = byte; // put them in array
   }
 
+  //{ data: Uint8Array [ 170, 128 ], paddingBits: 7 } for "101010101"
   return { data: bytes, paddingBits: padding === 8 ? 0 : padding };
 }
 
 /**
  * Convert Uint8Array back to binary string
+ *  Compressed data → Binary string → Huffman traversal
+ *  return like "111000" (huffman code)
  */
 
 function uint8ArrayToBinaryString(bytes: Uint8Array, paddingBits: number): string {
   let binString = "";
   for (let i = 0; i < bytes.length; i++) {
-    binString += bytes[i].toString(2).padStart(8, "0");
+    binString += bytes[i].toString(2).padStart(8, "0"); // converts byte value to binary string and concatinate
   }
-  return binString.slice(0, binString.length - paddingBits);
+  return binString.slice(0, binString.length - paddingBits); // return "1110101"
 }
 
 /**
  * Build an optimized Huffman tree
  */
 function buildHuffmanTree(data: string): HuffmanTree {
-  const freqArray = new Uint32Array(65536); // Support for full UTF-16
+  const freqArray = new Uint32Array(65536); //  for  UTF-16
 
   for (let i = 0; i < data.length; i++) {
     freqArray[data.charCodeAt(i)]++;
@@ -83,7 +92,7 @@ function serializeTree(node: HuffmanTree): Uint8Array {
   function serialize(node: HuffmanNode) {
     if (node.char !== undefined) {
       parts.push(1); // Leaf node
-      parts.push(node.char.charCodeAt(0));
+      parts.push(node.char.charCodeAt(0)); // [1,65,1,66]
     } else {
       parts.push(0); // Internal node
       if (node.left) serialize(node.left);
@@ -162,16 +171,16 @@ export function huffmanCompress(data: string): {
   const tree = buildHuffmanTree(data);
   const codes = generateHuffmanCode(tree);
 
-  const binaryString = Array.from(data).map(char => codes[char]).join('');
-  const { data: compressedData, paddingBits } = binaryStringToUint8Array(binaryString);
+  const binaryString = Array.from(data).map(char => codes[char]).join('');//join each huffman code 
+  const { data: compressedData, paddingBits } = binaryStringToUint8Array(binaryString); // convert binary to Uint8Array
   const serializedTree = serializeTree(tree);
 
-  const compressedSize = compressedData.length + serializedTree.length + 8; // +8 for metadata
+  const compressedSize = compressedData.length + serializedTree.length + 8; // +8 for metadata( information about padding bits)
 
   return {
-    compressedData,
-    tree: serializedTree,
-    paddingBits,
+    compressedData, // from binaryStringToUint8Array
+    tree: serializedTree, // from serializeTree
+    paddingBits, // from binaryStringToUint8Array
     originalSize,
     compressedSize
   };
@@ -198,8 +207,8 @@ export function huffmanDecompress(
     currentNode = bit === "0" ? currentNode.left! : currentNode.right!;
 
     if (currentNode?.char !== undefined) {
-      decoded += currentNode.char;
-      currentNode = huffmanTree;
+      decoded += currentNode.char; //append decoded char
+      currentNode = huffmanTree; // back to root
     }
   }
 

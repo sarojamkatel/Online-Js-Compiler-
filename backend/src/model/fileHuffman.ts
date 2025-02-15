@@ -1,8 +1,9 @@
 import fs from "fs/promises";
 import path from "path";
 import { IFile } from "../interfaces/file";
-import { huffmanCompress, huffmanDecompress } from "./huffman2";
+import { huffmanCompress, huffmanDecompress } from "./huffman";
 
+// 1kb = to  balances compression benefits vs overhead costs
 const COMPRESSION_THRESHOLD = 1024; // Only compress files larger than 1KB
 
 export class FileModal {
@@ -24,8 +25,9 @@ export class FileModal {
   ): Buffer {
     const header = new Uint8Array(9); // 1 byte for flags, 4 bytes each for sizes
     header[0] = isCompressed ? 1 : 0;
-    new DataView(header.buffer).setUint32(1, compressedSize, true);
-    new DataView(header.buffer).setUint32(5, treeSize, true);
+    new DataView(header.buffer).setUint32(1, compressedSize, true); // DataView -- read and write in binary  1-byte position 1(1-4)
+    // 5- setUint32(4 bytes) start from 5 
+    new DataView(header.buffer).setUint32(5, treeSize, true); // true -- little-endian format(Most significant byte at lowest)  (5-8)
     return Buffer.from(header);
   }
 
@@ -69,7 +71,7 @@ export class FileModal {
         const header = this.createFileHeader(paddingBits, compressedData.length, tree.length, true);
         const fileBuffer = Buffer.concat([
           header,
-          Buffer.from(tree),
+          Buffer.from(tree), // .from() create a new buffer
           Buffer.from(compressedData)
         ]);
 
@@ -125,7 +127,7 @@ export class FileModal {
             0
           );
         } else {
-          fileData = fileBuffer.slice(9).toString('utf8');
+          fileData = fileBuffer.slice(9).toString('utf8'); // if not compress convert buffer to utf8
         }
 
         files.push({ fileName, fileData });
